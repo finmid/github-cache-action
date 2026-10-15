@@ -1,0 +1,17 @@
+name: Set up github-actions-toolkit
+description: Checks out and builds the customised toolkit cache package that `@actions/cache` resolves to
+runs:
+  using: composite
+  steps:
+    # Pinned to the source dist/ is built from: upstream @actions/cache 3.2.4 plus the local cache client
+    # (branch local-cache-3.2.4). Bump together with a dist/ rebuild.
+    - name: Checkout github-actions-toolkit
+      uses: actions/checkout@v5
+      with:
+        repository: finmid/github-actions-toolkit
+        ref: 21ead9f4ed28f51755898e27b39d5a3479f4046f
+        path: github-actions-toolkit
+    - name: Build the cache package
+      shell: bash
+      working-directory: github-actions-toolkit/packages/cache
+      run: npm ci && npm run tsc
